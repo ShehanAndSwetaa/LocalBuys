@@ -23,3 +23,24 @@ async function addBusiness(business) {
 async function addProduct(business, product) {
     return db.collection(BUSINESSES).doc(business.name).collection(PRODUCTS).add(product);
 }
+
+async function getProducts() {
+    let products = {};
+    return db.collection(BUSINESSES).get()
+        .then((snapshot) => {
+            let promises = [];
+            snapshot.forEach((doc) => {
+                let business = Business.fromJson(doc.data());
+                promises.push(db.collection(BUSINESSES).doc(doc.id).collection(PRODUCTS).get()
+                    .then((snapshot) => {
+                        snapshot.forEach((productDoc) => {
+                            products[productDoc.id] = Product.fromDoc(productDoc, business);
+                        });
+                    }).catch((error) => console.log("Failed to retrieve products for ", business.name)));
+            });
+            return Promise.all(promises).then(data => {
+                console.log(`Retrieved ${Object.keys(products).length} products`);
+                return products;
+            });
+        }).catch((error) => { console.log("Failed to retrieve products"); });
+}

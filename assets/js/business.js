@@ -1,139 +1,5 @@
 const BUSINESS_KEY = "business";
 
-class Business {
-    constructor() {
-        this._name = "";
-        this._email = 0;
-        this._address = 0;
-    }
-    
-    get name() {
-        return this._name;
-    }
-    
-    set name(value) {
-        this._name = value;
-    }
-    
-    get email() {
-        return this._email;
-    }
-    
-    set email(value) {
-        this._email = value;
-    }
-    
-    get address() {
-        return this._address;
-    }
-    
-    set address(value) {
-        this._address = value;
-    }
-    
-    get json() {
-        return {
-            "name" : this.name,
-            "email" : this.email,
-            "address": this.address,
-        };
-    }
-    
-    join() {
-        window.localStorage.setItem(BUSINESS_KEY, JSON.stringify(this.json));
-        addBusiness(this.json)
-            .then(() => {
-                console.log("Added business: ", this);
-                // call main again to show Product Form
-                main();
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-    }
-}
-
-class Product {
-    constructor(business) {
-        this._business = business;
-        this._name = "";
-        this._category = "";
-        this._price = 0;
-        this._inventory = 0;
-        this._image = "";
-    }
-    
-    get business() {
-        return this._business;
-    }
-    
-    get name() {
-        return this._name;
-    }
-    
-    set name(value) {
-        this._name = value;
-    }
-    
-    get category() {
-        return this._category;
-    }
-    
-    set category(value) {
-        this._category = value;
-    }
-    
-    get price() {
-        return this._price;
-    }
-    
-    set price(value) {
-        this._price = value;
-    }
-    
-    get inventory() {
-        return this._inventory;
-    }
-    
-    set inventory(value) {
-        this._inventory = value;
-    }
-    
-    get image() {
-        return this._image;
-    }
-    
-    set image(value) {
-        this._image = value;
-    }
-    
-    get json() {
-        return {
-            "name" : this.name,
-            "category" : this.category,
-            "price" : this.price,
-            "inventory": this.inventory,
-            "image": this.image
-        };
-    }
-    
-    upload() {
-        console.log(this._business);
-        console.log("Uploading product");
-        console.log(this.json);
-    
-        addProduct(this.business, this.json)
-            .then(() => {
-                console.log("Added product: ", this);
-                // call main again to show Product Form
-                main();
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-    }
-}
-
 function getBusiness() {
     let business = window.localStorage.getItem(BUSINESS_KEY);
     if (business !== null) {
@@ -179,9 +45,20 @@ function main() {
             const images = $('.fileinput').fileinput()[0].getElementsByTagName('img');
             product.image = images[images.length - 1].src;
             // upload product
-            product.upload();
-            // clear form
-            form.reset();
+            console.log(this.json);
+            addProduct(product.business, product.json)
+                .then(() => {
+                    console.log("Added product: ", this);
+                    // call main again to show Product Form
+                    main();
+                    // clear form
+                    form.reset();
+                    // TODO: show success message
+                })
+                .catch((error) => {
+                    // TODO: display error message
+                    console.error("Error adding document: ", error);
+                });
         };
     } else {
         console.log("Business Form");
@@ -198,7 +75,16 @@ function main() {
             business.name = nameInput.value;
             business.email = emailInput.value;
             business.address = addressInput.value;
-            business.join();
+            window.localStorage.setItem(BUSINESS_KEY, JSON.stringify(this.json));
+            addBusiness(business.json)
+                .then(() => {
+                    console.log("Added business: ", this);
+                    // call main again to show Product Form
+                    main();
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
         };
     }
 }
