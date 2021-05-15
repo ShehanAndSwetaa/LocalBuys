@@ -75,10 +75,10 @@ function main() {
             business.name = nameInput.value;
             business.email = emailInput.value;
             business.address = addressInput.value;
-            window.localStorage.setItem(BUSINESS_KEY, JSON.stringify(this.json));
+            window.localStorage.setItem(BUSINESS_KEY, JSON.stringify(business.json));
             addBusiness(business.json)
                 .then(() => {
-                    console.log("Added business: ", this);
+                    console.log("Added business: ", business);
                     // call main again to show Product Form
                     main();
                 })

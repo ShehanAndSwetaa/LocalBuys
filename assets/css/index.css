@@ -35,3 +35,11 @@
     text-align: center;
     padding-top: 10px;
 }
+
+.nav-btn:hover {
+    cursor: pointer;
+}
+
+#cart-desc {
+    display: inline;
+}
