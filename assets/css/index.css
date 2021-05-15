@@ -1,0 +1,18 @@
+.select-holder {
+    padding-left: 0 !important;
+}
+
+.filter-option-inner-inner {
+    text-transform: none;
+    font-family: inherit;
+    font-size: small;
+    color: #495057;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.bootstrap-select {
+    padding-left: 0;
+}
