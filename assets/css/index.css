@@ -24,6 +24,8 @@
 }
 
 .product-image {
+    max-height: 300px;
+    max-width: fit-content;
     margin: 0;
     position: absolute;
     top: 50%;
@@ -42,4 +44,8 @@
 
 #cart-desc {
     display: inline;
+}
+
+.wide-modal {
+    max-width: 80%;
 }
