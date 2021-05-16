@@ -90,7 +90,7 @@ class Product {
     }
     
     set price(value) {
-        this._price = value;
+        this._price = parseFloat(value);
     }
     
     get inventory() {
@@ -118,6 +118,11 @@ class Product {
             "image": this.image
         };
     }
+    
+    isValid() {
+        return (this.name !== "" && this.category !== "" && this.price >= 0 && this.inventory > 0 && this.image !== "");
+    }
+    
     
     static fromDoc(doc, business) {
         const json = doc.data();

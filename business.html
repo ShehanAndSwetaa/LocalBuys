@@ -45,10 +45,10 @@
   <div class="page-header header-small" data-parallax="true" style="background-image: url('assets/img/business.gif');">
     <div class="container">
       <div class="row">
-        <div class="col-md-8 ml-auto mr-auto text-center">
-          <div class="brand">
-            <h1 class="title"> TODO </h1>
-            <h4> todo </h4>
+        <div class="col-md-8 ml-auto mr-auto text-center text-dark">
+          <div class="brand text-dark">
+            <h1 class="title text-dark"> Selling from Local Shops Made Easy </h1>
+            <h4>Display your products alongside other small businesses near you</h4>
           </div>
         </div>
       </div>
@@ -88,6 +88,12 @@
         </div>
 
         <div id="product_form" class="row">
+          <div class="text-left left-padding">
+            <button class="btn btn-outline-light btn-round" onclick="clearBusiness()">
+              Not you?
+            </button>
+          </div>
+
           <div class="col-md-12">
             <form role="form" id="product-form" method="post">
               <div class="form-group">
@@ -148,6 +154,14 @@
       </div>
     </div>
   </div>
+
+  <div id="snackbar" class="">
+    <div class="alert alert-primary round-alert">
+      <div id="toast-content" class="container">
+      </div>
+    </div>
+  </div>
+
   <footer class="footer footer-default">
     <div class="container">
       <nav class="float-left">

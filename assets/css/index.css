@@ -13,6 +13,10 @@
     padding: 0;
 }
 
+.left-padding {
+    padding-left: 15px;
+}
+
 .bootstrap-select {
     padding-left: 0;
 }
@@ -48,4 +52,46 @@
 
 .wide-modal {
     max-width: 80%;
+}
+
+#snackbar {
+    opacity: 0;
+    text-align: center;
+    position: fixed;
+    z-index: 3;
+    left: 50%;
+    bottom: 50px;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+#snackbar.show {
+    opacity: 1;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.round-alert {
+    border-radius: 20px;
+}
+
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 50px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 50px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
 }

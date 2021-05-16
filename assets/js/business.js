@@ -1,4 +1,12 @@
 const BUSINESS_KEY = "business";
+const INFO = "info";
+const ERROR = "error";
+
+function clearBusiness() {
+    window.localStorage.clear();
+    // call main to load business form
+    main();
+}
 
 function getBusiness() {
     let business = window.localStorage.getItem(BUSINESS_KEY);
@@ -22,10 +30,7 @@ function main() {
     const businessForm = document.getElementById('business_form');
     const productForm = document.getElementById('product_form');
     
-    console.log(business);
-    
     if (business) {
-        console.log("Product Form");
         businessHeader.innerText = `Welcome ${business.name}`;
         toggleView(productForm, businessForm);
         const form = document.getElementById('product-form');
@@ -44,24 +49,24 @@ function main() {
             product.inventory = inventoryInput.value;
             const images = $('.fileinput').fileinput()[0].getElementsByTagName('img');
             product.image = images[images.length - 1].src;
-            // upload product
-            console.log(this.json);
-            addProduct(product.business, product.json)
-                .then(() => {
-                    console.log("Added product: ", this);
-                    // call main again to show Product Form
-                    main();
-                    // clear form
-                    form.reset();
-                    // TODO: show success message
-                })
-                .catch((error) => {
-                    // TODO: display error message
-                    console.error("Error adding document: ", error);
-                });
+            if (product.isValid()) {
+                // upload product
+                addProduct(product.business, product.json)
+                    .then(() => {
+                        showToast(INFO, `Added ${product.name} successfully!`);
+                        // call main again to show Product Form
+                        main();
+                        // clear form
+                        form.reset();
+                    })
+                    .catch((error) => {
+                        showToast(ERROR, `Failed to add ${product.name}`);
+                    });
+            } else {
+                showToast(ERROR, `One or more product fields are invalid`);
+            }
         };
     } else {
-        console.log("Business Form");
         businessHeader.innerText = "Join Local Buys";
         toggleView(businessForm, productForm);
         
@@ -78,17 +83,40 @@ function main() {
             window.localStorage.setItem(BUSINESS_KEY, JSON.stringify(business.json));
             addBusiness(business.json)
                 .then(() => {
-                    console.log("Added business: ", business);
+                    showToast(INFO, `${business.name} successfully joined Local Buys!`);
                     // call main again to show Product Form
                     main();
                 })
                 .catch((error) => {
-                    console.error("Error adding document: ", error);
+                    showToast(ERROR, `Failed to join Local Buys`);
                 });
         };
     }
 }
 
+let numToasts = 0;
+function showToast(type, message) {
+    let icon = "info_outline";
+    if (type === ERROR) {
+        icon = "error_outline";
+    }
+    const snackbar = document.getElementById("snackbar");
+    const toastContent = document.getElementById("toast-content");
+    toastContent.innerHTML = `
+      <div class="alert-icon">
+        <i class="material-icons">${icon}</i>
+      </div>
+      ${message}
+    `;
+    snackbar.className = "show";
+    numToasts += 1;
+    setTimeout(function() {
+        numToasts -= 1;
+        if (numToasts === 0) {
+            snackbar.className = snackbar.className.replace("show", "");
+        }
+    }, 3000);
+}
 
 $(document).ready(function(){
     main();

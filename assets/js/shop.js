@@ -1,3 +1,5 @@
+const INFO = "info";
+const ERROR = "error";
 let products = {};
 let cart = {};
 
@@ -27,7 +29,6 @@ function updateItemsInCart() {
         const quantity = cart[product_id].quantity;
         const amount = price*quantity;
         totalAmount += amount;
-        console.log(amount);
         cartModal.innerHTML += `
                 <tr>
                   <td>
@@ -72,10 +73,13 @@ function updateItemsInCart() {
 }
 
 function purchase() {
-    console.log("Purchased items");
     // clear the cart
+    const numItems = Object.keys(cart).length;
     cart = {};
     updateItemsInCart();
+    if (numItems > 0) {
+        showToast(INFO, `Purchased ${numItems} products successfully!`);
+    }
 }
 
 function addToCart(product_id) {
@@ -87,6 +91,7 @@ function addToCart(product_id) {
         }
     }
     updateItemsInCart();
+    showToast(INFO, `Added "${products[product_id].name}" to cart`);
 }
 
 function toggleCategory(checkbox, category) {
@@ -133,8 +138,7 @@ function main() {
     getProducts().then((p) => {
         Object.assign(products, p);
         renderProducts();
-    }).catch((err) => console.log("Failed to retrieve products"));
-    console.log(products);
+    }).catch((err) => showToast(ERROR, "Failed to retrieve products"));
     
     let slider = document.getElementById('priceRange');
     
@@ -183,15 +187,37 @@ function filterProducts(products) {
 }
 
 function renderProducts() {
-    console.log("render")
     if (products && Object.keys(products).length > 0) {
-        console.log("render2")
         const container = document.getElementById('product-listings');
         container.innerHTML = "";
         for (const product_id in filterProducts(products)) {
             container.innerHTML += createProductCard(product_id, products[product_id]);
         }
     }
+}
+
+let numToasts = 0;
+function showToast(type, message) {
+    let icon = "info_outline";
+    if (type === ERROR) {
+        icon = "error_outline";
+    }
+    const snackbar = document.getElementById("snackbar");
+    const toastContent = document.getElementById("toast-content");
+    toastContent.innerHTML = `
+      <div class="alert-icon">
+        <i class="material-icons">${icon}</i>
+      </div>
+      ${message}
+    `;
+    snackbar.className = "show";
+    numToasts += 1;
+    setTimeout(function() {
+        numToasts -= 1;
+        if (numToasts === 0) {
+            snackbar.className = snackbar.className.replace("show", "");
+        }
+    }, 3000);
 }
 
 $(document).ready(function(){
