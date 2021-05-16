@@ -58,6 +58,8 @@ function main() {
                         main();
                         // clear form
                         form.reset();
+                        // category dropdown maintains same category for ease of input
+                        categoryInput.value = product.category;
                     })
                     .catch((error) => {
                         showToast(ERROR, `Failed to add ${product.name}`);
